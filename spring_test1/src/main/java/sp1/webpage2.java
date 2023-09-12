@@ -1,5 +1,6 @@
 package sp1;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class webpage2 {
@@ -146,12 +149,10 @@ public class webpage2 {
 
 		return null;
 	}
-	/*이미지 삭제 예시
-	 * String url = getServletContext().getRealPath("/");
-	 * String filename = db저장값
-	 * File file = new File(url + filename);
-	 * file.delete();
-	*/
+	/*
+	 * 이미지 삭제 예시 String url = getServletContext().getRealPath("/"); String filename
+	 * = db저장값 File file = new File(url + filename); file.delete();
+	 */
 
 	// Getter와 Setter를 이용해서 값을 로드
 	@PostMapping("/spring3ok.do")
@@ -262,4 +263,15 @@ public class webpage2 {
 		return "/WEB-INF/jsp/member_list";
 	}
 
+	@PostMapping("/fileuploadok.do")
+	public void fileupload(MultipartFile mfile, HttpServletRequest req, Model model) throws Exception {
+		String filename = mfile.getOriginalFilename();
+		long filesize = mfile.getSize();
+		String url = req.getServletContext().getRealPath("/fileup/") + filename;
+		// 파일저장
+		File f = new File(url);
+		FileCopyUtils.copy(mfile.getBytes(), f);
+		System.out.println("파일업로두성공");
+
+	}
 }
