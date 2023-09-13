@@ -69,7 +69,6 @@ class client_chat2 {
 			sc.close();
 			ds.close();
 			br.close();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
