@@ -24,11 +24,40 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class webpage2 {
+
 	PrintWriter pw = null;
+	Login_Etc le = null;
+
+	// 카카오로그인
+	@PostMapping("/klogin.do")
+	public String klogin(HttpServletRequest req, Model model) throws Exception {
+		String part = req.getParameter("part");
+		int call = 0;
+		if (part.equals("kakao")) {
+			String kid = req.getParameter("kakaoid");
+			String kemail = req.getParameter("kakaomail");
+			String knick = req.getParameter("kakaonick");
+			le = new Login_Etc(kid, kemail, knick, part);
+		} else {
+			String name = req.getParameter("mname");
+			String pw = req.getParameter("mpw");
+			le = new Login_Etc(name, pw, "", part);
+		}
+		le.join();
+		if (le.getCall() > 0) {
+			System.out.println("ok");
+
+		} else {
+			System.out.println("error");
+		}
+
+		return null;
+	}
 
 	// JSTL로 뷰페이지 출력 파트
 	@RequestMapping("/product_list.do")
@@ -273,5 +302,23 @@ public class webpage2 {
 		FileCopyUtils.copy(mfile.getBytes(), f);
 		System.out.println("파일업로두성공");
 
+	}
+
+	@PostMapping("/reserveok.do")
+	public String air_reserve(Model model, @RequestParam String aplane_number, @RequestParam String acorp,
+			@RequestParam String anation, @RequestParam String adate, @RequestParam String adate2,
+			@RequestParam String adate3, @RequestParam String amoney, @RequestParam String areserve) {
+		Simplify sp = new Simplify();
+		// adate = sp.day(adate);
+		// adate2 = sp.day(adate2);
+		// adate3 = sp.day(adate3);
+		int result = new AirQuery().result(aplane_number, acorp, anation, adate, areserve, amoney, adate2, adate3);
+		if (result == 0) {
+			System.out.println("ok");
+		} else {
+			System.out.println("error");
+		}
+		model.addAttribute("msg",result);
+		return "/WEB-INF/jsp/air_reserveok";
 	}
 }
