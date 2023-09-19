@@ -3,6 +3,7 @@ package sp1;
 import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -318,7 +319,28 @@ public class webpage2 {
 		} else {
 			System.out.println("error");
 		}
-		model.addAttribute("msg",result);
-		return "/WEB-INF/jsp/air_reserveok";
+		ArrayList<ArrayList<String>> list = new AirQuery().result2();
+		model.addAttribute("list", list);
+		return "/air_person";
+	}
+
+	@PostMapping("/reserveok1.do")
+	public String reserve(Model model, @RequestParam String mid, @RequestParam String mname, @RequestParam String mpport,
+			@RequestParam String mtel, @RequestParam String aplane_number, @RequestParam String mperson,
+			@RequestParam String totalmoney, @RequestParam String acode) {
+		try {
+			new AirQuery().result3(mid, mname, mpport, mtel, aplane_number, acode, mperson, totalmoney);
+			ArrayList<ArrayList<String>> list = new AirQuery().result4();
+			model.addAttribute("list",list);
+			//총 갯수
+			int sum = new AirQuery().totalSum("air_person");
+			model.addAttribute("sum",sum);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "/air_list";
 	}
 }

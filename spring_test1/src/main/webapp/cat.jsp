@@ -25,4 +25,40 @@
 </span>
 </div>
 </body>
+<script>
+var startx = 0;
+var endx = 0;
+var ori = 0;
+var imgsize = 200;
+var node = 0;
+var node_ea;
+
+document.querySelector("#images").addEventListener("touchstart",function(a){
+startx = a.touches[0].pageX;
+node_ea = document.querySelectorAll("#images > img").length;
+
+})
+document.querySelector("#images").addEventListener("touched",function(a){
+	endx = a.changedTouches[0].pageX;
+	if(startx>endx){
+		next(endx);
+	}else{
+		prev(endx);
+	}
+})
+function next(z){
+	if(node < node_ea-1){
+		ori -= imgsize;
+		node = node -1;
+		document.querySelector("#images").style["transform"]="translateX("+ori+"px)";
+	}
+}
+function prev(z){
+	if(node>0){
+		ori += imgsize;
+		node = node -1;
+		document.querySelector("#images").style["transform"]="translateX("+ori+"px)";
+	}
+}
+</script>
 </html>

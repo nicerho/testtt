@@ -5,23 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%
-ResultSet rs = null;
-String db_driver = "com.mysql.jdbc.Driver";
-String db_url = "jdbc:mysql://umj7-003.cafe24.com/wjswjdgh123";
-//String db_url = "jdbc:mysql://localhost:3306/wjswjdgh123";
-String db_user = "wjswjdgh123";
-String db_pass = "qkdrn123!";
-try {
-	Class.forName(db_driver);
-	Connection con = DriverManager.getConnection(db_url, db_user, db_pass);
-	String sql = "select * from air_reserve order by ano desc";
-	PreparedStatement ps = con.prepareStatement(sql);
-	rs = ps.executeQuery();
-} catch (Exception e) {
-	e.printStackTrace();
-}
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +13,7 @@ try {
 <title>Insert title here</title>
 </head>
 <body>
-	<form id="f">
+	<form id="f" method="post" action="./reserveok1.do">
 		<input type="hidden" name="acode" value=""> <input
 			type="hidden" name="aplane_number" value="">
 		<p>뱅기예매
@@ -41,15 +25,8 @@ try {
 			<input type="text" name="mtel" placeholder="PHONENUMBER"
 				maxlength="11"><br> <select name="aircorp"
 				onchange="data(this.value)">
-				<option value="">항공사 선택</option>
-				<%
-				while (rs.next()) {
-				%>
-				<option
-					value="<%=rs.getString("acorp")%>/<%=rs.getString("amoney")%>/<%=rs.getString("aplane_number")%>"><%=rs.getString("acorp")%></option>
-				<%
-				}
-				%>
+				<option value="">항공사 선택</option>		
+				<option	value=""></option>			
 			</select> <input type="text" name="mperson" placeholder="인원수입력"
 				onkeyup="person(this.value)"><br>
 		<p>총 항공료
@@ -74,7 +51,9 @@ try {
 		f.totalmoney.value = sum;
 	}
 	document.querySelector("#btn").addEventListener("click", function() {
-
+		if(confirm("k")){
+			f.submit()
+		}
 	})
 </script>
 </html>
