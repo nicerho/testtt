@@ -18,7 +18,7 @@ public class AirQuery {
 		Statement st = con.createStatement();
 		ResultSet rs = st.executeQuery(sql);
 		rs.next();
-		int sum = rs.getInt(0);
+		int sum = Integer.parseInt(rs.getString("ctn"));
 		con.close();
 		st.close();
 		rs.close();
